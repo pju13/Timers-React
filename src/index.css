@@ -1,0 +1,14 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+body {
+    background-color: red;
+    min-height: 100vh;
+
+    background: /* just to illustrate card transparency */
+		url(./clouds-2725520_1920.jpg) 
+			50%/ cover #212121;
+	/* darken image (multiplying its RGB channels with 
+	 * those of background-color) for better text contrast */
+	background-blend-mode: multiply;
+}

@@ -1,0 +1,80 @@
+@property --rotation {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0turn;
+}
+
+.finish-box {
+  position: relative;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  padding: 1rem;         
+  border-radius: 50%;
+  overflow: hidden;
+
+  font-size: 2rem;
+  font-family: system-ui; 
+  color: white;
+}
+
+.gradient-box {
+  position: relative;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  padding: 1rem;         
+  border-radius: 50%;
+  overflow: hidden;
+
+  font-size: 2rem;
+  font-family: system-ui;
+  color: white;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: 30px;
+
+    background-image: conic-gradient(from var(--rotation, 0turn),
+      hsl(360, 100%, 50%),
+      hsl(315, 100%, 50%),
+      hsl(270, 100%, 50%),
+      hsl(225, 100%, 50%),
+      hsl(180, 100%, 50%),
+      hsl(135, 100%, 50%),
+      hsl(90, 100%, 50%),
+      hsl(45, 100%, 50%),
+      hsl(0, 100%, 50%)
+  );
+
+  -webkit-mask-image: radial-gradient(hsl(0 0 0 / .1) 50%, black); /* Masque radial */
+  mask-image: radial-gradient(hsl(0 0 0 / .1) 50%, black); /* Masque radial */
+  -webkit-mask-size: 100% 100%; /* Taille du masque */
+  mask-size: 100% 100%; /* Taille du masque */
+
+    /*background-image:
+      conic-gradient(from var(--rotation, 0turn),
+      #F1F8E9, 
+      #9CCC65,
+      #7CB342,
+      #9CCC65,
+      #F1F8E9
+    ); */
+   
+    /*-webkit-mask-image: radial-gradient(hsl(0 0 0 / .1) 55%, black); /* Masque radial */
+    /*mask-image: radial-gradient(hsl(0 0 0 / .1) 55%, black); /* Masque radial */
+    /*-webkit-mask-size: 100% 100%; /* Taille du masque */
+    /*mask-size: 100% 100%; /* Taille du masque */
+
+    animation: 6s rotateGradient linear infinite;
+    animation-direction: reverse;
+  }
+}
+
+@keyframes rotateGradient {
+  from { --rotation: 0turn}
+  to { --rotation: 1turn}
+}
