@@ -27,3 +27,8 @@ L'objectif principal de ce projet était de créer une application de gestion de
 ## Conclusion
 
 Ce projet a été une excellente opportunité pour approfondir mes compétences en React et explorer des technologies modernes pour la création d'applications web. Je suis fier du résultat final et je suis impatient de continuer à améliorer et à étendre les fonctionnalités de l'application.
+
+## Après téléchargement du projet :
+
+Lançer les commandes : npm install
+[puis] npm run dev
