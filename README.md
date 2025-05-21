@@ -1,54 +1,29 @@
-# React + TypeScript + Vite
+# Projet de gestion de Mul-Timers - SPA React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Aperçu du Projet
 
-Currently, two official plugins are available:
+J'ai récemment développé une application monopage (SPA) complète en React dédiée à la création de multi-timers. Cette application utilise une architecture moderne pour offrir une expérience utilisateur fluide et intuitive.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Technologies Utilisées
 
-## Expanding the ESLint configuration
+- **React** : Le cœur de l'application, permettant une interface utilisateur dynamique et réactive.
+- **Zustand** : Pour la gestion de l'état global, facilitant le partage de données à travers les composants sans prop drilling.
+- **DaisyUI** : Une bibliothèque de composants UI basée sur Tailwind CSS, permettant une conception rapide et cohérente.
+- **Tailwind CSS** : Pour le styling, offrant une grande flexibilité et une personnalisation facile des composants.
+- **Formik** : Pour la gestion des formulaires, simplifiant la validation et la soumission des données.
+- **Yup** : Pour la validation des formulaires, assurant que les données saisies par les utilisateurs sont correctes et cohérentes.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Fonctionnalités Clés
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- **Interface Utilisateur Intuitive** : Conçue avec DaisyUI et Tailwind CSS pour une expérience utilisateur agréable et cohérente.
+- **Gestion des Timers** : Affichage des Timers avec la possibilité de les mettre en pause et de les supprimer. Possibilité de manager les Timers : Mettre tous les Timers en Pause, Suppression des Timers.
+- **Formulaires Robustes** : Utilisation de Formik et Yup pour le formulaire de saisie des Hr:Min:Sec robustes et validés.
+- **Gestion du temps** : Chaque Timer utilise son propre setInterval() pour gérer l'affichage.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Objectifs et Défis
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+L'objectif principal de ce projet était de créer une application de gestion de Timers moderne et performante, offrant une expérience utilisateur fluide et intuitive. Les défis incluaient la gestion de l'état global avec Zustand, l'optimisation des performances des Timers (setInterval() et clearInterval()), et l'intégration de formulaire robustes avec Formik et Yup.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+## Conclusion
+
+Ce projet a été une excellente opportunité pour approfondir mes compétences en React et explorer des technologies modernes pour la création d'applications web. Je suis fier du résultat final et je suis impatient de continuer à améliorer et à étendre les fonctionnalités de l'application.
