@@ -2,7 +2,6 @@
 @plugin "daisyui";
 
 body {
-    background-color: red;
     min-height: 100vh;
 
     background: /* just to illustrate card transparency */

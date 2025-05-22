@@ -22,15 +22,15 @@ export const Timerform: React.FC = () => {
 
     const validationSchema = Yup.object({
         heure: Yup.number()
-        .min(0, 'Doit être 0 ou plus')
-        .max(24, 'Doit être 24 ou moins'),
+        .min(0, 'Heure doit être supérieur ou égal à 0')
+        .max(24, 'Heure doit inférieur ou égal à 24'),
         minute: Yup.number()
-        .min(0, 'Doit être 0 ou plus')
-        .max(59, 'Doit être 59 ou moins'),
+        .min(0, 'Minute doit être supérieur ou égal à 0')
+        .max(59, 'Minute doit inférieur ou égal à 59'),
         seconde: Yup.number()
-        .min(0, 'Doit être 0 ou plus')
-        .max(59, 'Doit être 59 ou moins')
-        .required('Required'),                
+        .min(0, 'Minute doit être supérieur ou égal à 0')
+        .max(59, 'Minute doit inférieur ou égal à 59')
+        .required('Secondes est obligatoire'),                
     });
 
     const onSubmit = (values: Time) => {
@@ -84,9 +84,9 @@ export const Timerform: React.FC = () => {
                                 </div>
                             </div>                         
                         </div>
-                        <ErrorMessage name="heure" component="div" className="error" />
-                        <ErrorMessage name="minute" component="div" className="error" />
-                        <ErrorMessage name="seconde" component="div" className="error" />                          
+                        <ErrorMessage name="heure" component="div" className="error text-white" />
+                        <ErrorMessage name="minute" component="div" className="error text-white" />
+                        <ErrorMessage name="seconde" component="div" className="error text-white" />                          
                     </div>
                     <div className="flex justify-end mt-2 w-[550px] m-auto">
                         <div className="grid grid-cols-4 gap-2">

@@ -1,4 +1,4 @@
-# Projet de gestion de Mul-Timers - SPA React
+# Projet de gestion de Multi-Timers - SPA React
 
 ## Aperçu du Projet
 
