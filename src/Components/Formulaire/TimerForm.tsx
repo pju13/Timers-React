@@ -65,22 +65,22 @@ export const Timerform: React.FC = () => {
                     <div className="flex flex-col justify-center w-[700px] m-auto">
                         <div className="flex justify-center mt-10 ">
                             <div className="grid grid-cols-1 grid-rows-1 gap-2 justify-center">                      
-                                <div className="border-2 border-white rounded-lg relative bg-gray-700">
-                                    <p className="absolute top-1 left-15 text-amber-50 text-xl z-10">hr</p>
-                                    <p className="absolute top-1 right-55 text-amber-50 text-xl z-10">min</p>
-                                    <p className="absolute top-1 right-15 text-amber-50 text-xl z-10">sec</p>                    
+                                <div className="border-2 border-white rounded-lg relative text-amber-50 bg-gray-700">
+                                    <p className="absolute top-1 left-15 text-xl z-10">hr</p>
+                                    <p className="absolute top-1 right-55 text-xl z-10">min</p>
+                                    <p className="absolute top-1 right-15 text-xl z-10">sec</p>                    
                                     <Field type="text" 
                                         id="heure" name="heure"
                                         placeholder="00" 
-                                        className="input w-[150px] text-2xl p-15 border-0 bg-gray-700 text-white" />
+                                        className="input w-[150px] text-2xl p-15 bg-gray-700 border-none focus:outline-hidden" />
                                     : <Field type="text" 
                                         id="minute" name="minute" 
                                         placeholder="00" 
-                                        className="input w-[150px] text-2xl p-15 border-0 bg-gray-700 text-white" />
+                                        className="input w-[150px] text-2xl p-15 bg-gray-700 border-none focus:outline-hidden" />
                                     : <Field type="text" 
                                         id="seconde" name="seconde"
                                         placeholder="00" 
-                                        className="input w-[150px] text-2xl p-15 border-0 bg-gray-700 text-white" />
+                                        className="input w-[150px] text-2xl p-15 bg-gray-700 border-none focus:outline-hidden" />
                                 </div>
                             </div>                         
                         </div>
