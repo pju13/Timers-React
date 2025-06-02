@@ -16,9 +16,15 @@ export const CardCircle: React.FC<{ horlogeProps: Horloge }> = ({ horlogeProps }
     const gradientClass = isFinish === true ? 'finish-box' : isRunning === true ? 'gradient-box' : 'finish-box';
 
     return (
-        <div className={`card ${gradientClass}`}>
+        <div className={`card group relative ${gradientClass}`}>
+            <button 
+                className="btn btn-circle w-[15px] h-[15px] absolute top-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                onClick={() => removeHorloge(horlogeProps.id)}>
+                    X
+            </button>
+
             <div className={`radial-progress ${colorBg} m-auto`} 
-                style={{ "--value": convertirSecondesEnPourcentage(horlogeProps), "--size": "12rem", "--thickness": "10px" } /* as React.CSSProperties */ } 
+                style={{ "--value": convertirSecondesEnPourcentage(horlogeProps), "--size": "11rem", "--thickness": "8px" } /* as React.CSSProperties */ } 
                 aria-valuenow={convertirSecondesEnPourcentage(horlogeProps)} role="progressbar">{convertirSecondesEnHrMinSec(horlogeProps.timerRemaining)}
             </div>
             <div className="absolute top-12">
@@ -28,10 +34,15 @@ export const CardCircle: React.FC<{ horlogeProps: Horloge }> = ({ horlogeProps }
                 <div className="card-body">
                     <div className="card-actions justify-center">
                     {isFinish === false ?
-                        <button className="btn btn-dash " onClick={() => pauseHorloge(horlogeProps.id)}>{ horlogeProps.running === true ? "⏸" : "▶" }</button>
+                        <div className="tooltip tooltip-bottom tooltip-warning opacity-0 transition-opacity duration-300 group-hover:opacity-100" data-tip={ horlogeProps.running === true ? "Pause" : "Lecture" }>
+                            <label className="swap">
+                                <input type="checkbox" onClick={() => pauseHorloge(horlogeProps.id)} />
+                                <div className="swap-on">▶</div>
+                                <div className="swap-off">⏸</div>
+                            </label>
+                        </div>
                         : null
                     }
-                    <button className="btn btn-dash " onClick={() => removeHorloge(horlogeProps.id)}>🗑</button>
                     </div>
                 </div>
             </div>
