@@ -15,6 +15,11 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
+    /* Code navigateur uniquement : on n'inclut pas automatiquement @types/node
+     * (arrivé en dépendance transitive de Vitest), sinon setInterval renvoie
+     * un NodeJS.Timeout au lieu d'un number. */
+    "types": [],
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,

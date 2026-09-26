@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useStore } from "./Store/useStore";
-//import { Card } from "./Card";
 import { CardCircle } from "./CardCircle";
 
 export const DisplayHorloge: React.FC = () => {

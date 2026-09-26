@@ -1,2 +1,8 @@
 # Ignorer les fichiers de dépendances
 node_modules/
+
+# Build de production
+dist/
+
+# Préférences personnelles Claude Code (non partagées)
+CLAUDE.local.md

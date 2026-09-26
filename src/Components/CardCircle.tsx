@@ -24,7 +24,7 @@ export const CardCircle: React.FC<{ horlogeProps: Horloge }> = ({ horlogeProps }
             </button>
 
             <div className={`radial-progress ${colorBg} m-auto`} 
-                style={{ "--value": convertirSecondesEnPourcentage(horlogeProps), "--size": "11rem", "--thickness": "8px" } /* as React.CSSProperties */ } 
+                style={{ "--value": convertirSecondesEnPourcentage(horlogeProps), "--size": "11rem", "--thickness": "8px" } as React.CSSProperties}
                 aria-valuenow={convertirSecondesEnPourcentage(horlogeProps)} role="progressbar">{convertirSecondesEnHrMinSec(horlogeProps.timerRemaining)}
             </div>
             <div className="absolute top-12">
