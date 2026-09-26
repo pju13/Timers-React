@@ -1,12 +1,11 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage, FormikProps } from 'formik';
 import * as Yup from 'yup';
-import { useStore } from "../Store/useStore";
+import { useHorlogeStore } from "../../store/useHorlogeStore";
 
-
-export const Timerform: React.FC = () => {
+export function TimerForm() {
     const formikRef = React.useRef<FormikProps<Time>>(null);
-    const addHorloge = useStore((state) => state.addHorloge);
+    const addHorloge = useHorlogeStore((state) => state.addHorloge);
 
     type Time = {
         heure: number
@@ -28,8 +27,8 @@ export const Timerform: React.FC = () => {
         .min(0, 'Minute doit être supérieur ou égal à 0')
         .max(59, 'Minute doit inférieur ou égal à 59'),
         seconde: Yup.number()
-        .min(0, 'Minute doit être supérieur ou égal à 0')
-        .max(59, 'Minute doit inférieur ou égal à 59')
+        .min(0, 'Seconde doit être supérieur ou égal à 0')
+        .max(59, 'Seconde doit inférieur ou égal à 59')
         .required('Secondes est obligatoire'),                
     });
 

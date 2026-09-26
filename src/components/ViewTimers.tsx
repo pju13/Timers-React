@@ -1,12 +1,11 @@
-import React from "react";
-import { useStore } from "./Store/useStore";
-import { convertirSecondesEnHrMinSec } from "../assets/Utils/Utils";
+import { convertirSecondesEnHrMinSec } from "../utils/temps";
+import { useHorlogeStore } from "../store/useHorlogeStore";
 
-export const ViewTimers: React.FC = () => {
-    const horloges = useStore((state) => state.horloges);
-    const removeAll = useStore((state) => state.removeAll);
-    const removeOnlyStop = useStore((state) => state.removeOnlyStop);
-    const pauseAllHorloges = useStore((state) => state.pauseAllHorloges);
+export function ViewTimers() {
+    const horloges = useHorlogeStore((state) => state.horloges);
+    const removeAll = useHorlogeStore((state) => state.removeAll);
+    const removeOnlyStop = useHorlogeStore((state) => state.removeOnlyStop);
+    const pauseAllHorloges = useHorlogeStore((state) => state.pauseAllHorloges);
 
     const horlogesDisplay = horloges?.map((horloge) => {
         const isFinish: boolean = horloge.timerRemaining === 0 ? true : false;
@@ -16,7 +15,7 @@ export const ViewTimers: React.FC = () => {
 
         const displayPauseIcon = horloge.running === false ? "⏸" : null;
 
-        return <tr className={`className="text-[12px]" ${colorBg}`} key={horloge.id}>
+        return <tr className={`text-[12px] ${colorBg}`} key={horloge.id}>
             <td>{displayPauseIcon}</td>
             <td>{horloge.timerSet}</td>
             <td><span className="ml-4 mr-1">{convertirSecondesEnHrMinSec(horloge.timerRemaining)}</span></td>

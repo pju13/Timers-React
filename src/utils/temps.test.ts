@@ -3,8 +3,8 @@ import {
     convertirSecondesEnHrMinSec,
     convertirHMNenSecondes,
     convertirSecondesEnPourcentage,
-} from './Utils';
-import { Horloge } from '../../Types/types';
+} from './temps';
+import { Horloge } from '../types/types';
 
 describe('convertirHMNenSecondes', () => {
     it('convertit une chaîne "hr:min:sec" en secondes', () => {

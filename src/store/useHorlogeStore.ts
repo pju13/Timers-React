@@ -1,9 +1,9 @@
 import { nanoid } from "nanoid";
 import { create } from "zustand";
-import { convertirHMNenSecondes } from "../../assets/Utils/Utils";
-import { Horloge, StoreHorloge } from "../../Types/types";
+import { convertirHMNenSecondes } from "../utils/temps";
+import { Horloge, StoreHorloge } from "../types/types";
 
-export const useStore = create<StoreHorloge>((set) => ({
+export const useHorlogeStore = create<StoreHorloge>((set, get) => ({
     horloges: [],
 
     addHorloge: (timer: string) => {
@@ -15,16 +15,30 @@ export const useStore = create<StoreHorloge>((set) => ({
         }
 
         const idNew = nanoid();
+
+        // Chaque seconde : décompte, puis arrêt dès que le minuteur atteint 0.
+        // La règle vit ici et non dans un composant, pour s'appliquer même si rien n'est affiché.
+        const decompter = () => {
+            set(state => ({
+                horloges: state.horloges.map(horloge =>
+                    horloge.id === idNew && horloge.running ? {...horloge, timerRemaining: (horloge.timerRemaining-1)} : horloge)}))
+
+            const horloge = get().horloges.find(horloge => horloge.id === idNew);
+            if (!horloge) {
+                // Horloge disparue du store sans clearInterval : on coupe par sécurité
+                clearInterval(interval);
+            } else if (horloge.timerRemaining <= 0) {
+                get().stopHorloge(idNew);
+            }
+        };
+        const interval = setInterval(decompter, 1000);
+
         const newClock: Horloge = {
             id: idNew,
             timerSet: timer,
             timerRemaining: secondesTotal,
             running: true,
-            interval: setInterval(() => {
-                set(state => ({
-                    horloges: state.horloges.map(horloge =>
-                        horloge.id === idNew && horloge.running ? {...horloge, timerRemaining: (horloge.timerRemaining-1)} : horloge)}))
-            }, 1000),
+            interval,
             stop: false
         }
 
@@ -38,37 +52,22 @@ export const useStore = create<StoreHorloge>((set) => ({
     },
 
     pauseAllHorloges: () => {
-        set((state) => {
-            // Mets en pause tous les minuteurs actifs
-            state.horloges.forEach(horloge => {
-                if (!horloge.stop && horloge.timerRemaining >= 1) {
-                    horloge.running = !horloge.running;
-                }
-            });
-            
-            // Retourner le nouvel état avec le minuteur stoppé
-            return {
-                horloges: [...state.horloges]
-            };
-        }); 
+        // Bascule chaque minuteur actif en créant une copie : les horloges terminées gardent leur référence
+        set(state => ({
+            horloges: state.horloges.map(horloge =>
+                !horloge.stop && horloge.timerRemaining >= 1 && horloge.running ? {...horloge, running: false} : horloge)}))                
     },
 
     stopHorloge: (id: string) => {
-        set((state) => {
-            // Nettoyer l'intervalle avant de retourner le nouvel état
-            state.horloges.forEach(horloge => {
-                if (horloge.id === id) {
-                    //console.log("# Clear Interval et stop, id: ", id);
-                    clearInterval(horloge.interval);
-                    horloge.stop = true;
-                }
-            });
-            
-            // Retourner le nouvel état avec le minuteur stoppé
-            return {
-                horloges: [...state.horloges]
-            };
-        });        
+        // Effet de bord hors de set() : la fonction passée à set doit seulement calculer le nouvel état
+        const horlogeAStopper = get().horloges.find(horloge => horloge.id === id);
+        if (horlogeAStopper) {
+            clearInterval(horlogeAStopper.interval);
+        }
+
+        set(state => ({
+            horloges: state.horloges.map(horloge =>
+                horloge.id === id ? {...horloge, stop: true} : horloge)}))
     },
 
     removeHorloge: (id: string) => {
@@ -76,7 +75,6 @@ export const useStore = create<StoreHorloge>((set) => ({
             // Nettoyer l'intervalle avant de retourner le nouvel état
             state.horloges.forEach(horloge => {
                 if (horloge.id === id) {
-                    //console.log("# Clear Interval, id: ", id);
                     clearInterval(horloge.interval);
                 }
             });
@@ -103,7 +101,6 @@ export const useStore = create<StoreHorloge>((set) => ({
             // Nettoyer les intervalles avant de retourner le nouvel état
             state.horloges.forEach(horloge => {
                 if (!horloge.stop) {
-                    //console.log("# Clear Interval, id: ", horloge.id);
                     clearInterval(horloge.interval);
                 }
             });

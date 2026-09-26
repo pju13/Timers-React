@@ -1,4 +1,4 @@
-import { Horloge } from "../../Types/types";
+import { Horloge } from "../types/types";
 
 export function convertirSecondesEnHrMinSec(secondes: number, withLetters: boolean = false) {
     // Calculer les heures (HH) : Divise le nombre total de secondes par 3600 (le nombre de secondes dans une heure). 
@@ -30,7 +30,7 @@ export function convertirHMNenSecondes(timer: string) {
     return heure*3600 + minute*60 + seconde;
 }
 
-export function convertirSecondesEnPourcentage(horlogeProps: Horloge) {
-    const sec = convertirHMNenSecondes(horlogeProps.timerSet);
-    return (horlogeProps.timerRemaining / sec) * 100;
+export function convertirSecondesEnPourcentage(horloge: Horloge) {
+    const sec = convertirHMNenSecondes(horloge.timerSet);
+    return (horloge.timerRemaining / sec) * 100;
 }
