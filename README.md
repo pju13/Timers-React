@@ -4,6 +4,10 @@
 
 J'ai récemment développé une application monopage (SPA) complète en React dédiée à la création de multi-timers. Cette application utilise une architecture moderne pour offrir une expérience utilisateur fluide et intuitive.
 
+![Démonstration : ajout de minuteurs, pause, reprise, suppression et actions globales](docs/demo-timers.gif)
+
+<sub>Version vidéo : [docs/demo-timers.mp4](docs/demo-timers.mp4)</sub>
+
 ## Technologies Utilisées
 
 - **React** : Le cœur de l'application, permettant une interface utilisateur dynamique et réactive.
