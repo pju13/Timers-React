@@ -25,6 +25,20 @@ export function convertirSecondesEnHrMinSec(secondes: number, withLetters: boole
     return withLetters ? `${heure}h ${minute}m ${seconde}s` : `${heure}:${minute}:${seconde}`;
 }
 
+// Durée lisible par un humain, sans zéros inutiles : 90 → "1 min 30 s", 3600 → "1 h"
+export function formaterDuree(secondes: number) {
+    const heure = Math.trunc(secondes / 3600);
+    const minute = Math.trunc((secondes % 3600) / 60);
+    const seconde = Math.trunc(secondes % 60);
+
+    const morceaux = [];
+    if (heure > 0) morceaux.push(`${heure} h`);
+    if (minute > 0) morceaux.push(`${minute} min`);
+    if (seconde > 0 || morceaux.length === 0) morceaux.push(`${seconde} s`);
+
+    return morceaux.join(' ');
+}
+
 export function convertirHMNenSecondes(timer: string) {
     const [heure, minute, seconde] = timer.split(':').map(Number);
     return heure*3600 + minute*60 + seconde;

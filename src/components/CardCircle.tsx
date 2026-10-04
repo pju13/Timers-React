@@ -1,57 +1,64 @@
 import React from "react";
-import { convertirSecondesEnHrMinSec, convertirHMNenSecondes, convertirSecondesEnPourcentage } from "../utils/temps";
+import { convertirSecondesEnHrMinSec, convertirHMNenSecondes, convertirSecondesEnPourcentage, formaterDuree } from "../utils/temps";
+import { etatHorloge } from "../utils/etat";
 import './CardCircle.css';
 import { Horloge } from "../types/types";
 import { useHorlogeStore } from "../store/useHorlogeStore";
 
 type CardCircleProps = { horloge: Horloge };
 
-export function CardCircle({ horloge }: CardCircleProps) {    
+// 60 graduations comme sur un cadran de minuteur, une plus longue toutes les 5
+const GRADUATIONS = Array.from({ length: 60 }, (_, i) => (
+    <line key={i}
+        className={i % 5 === 0 ? 'majeure' : undefined}
+        x1="100" y1="7" x2="100" y2={i % 5 === 0 ? 19 : 13}
+        transform={`rotate(${i * 6} 100 100)`} />
+));
+
+export function CardCircle({ horloge }: CardCircleProps) {
     const pauseHorloge = useHorlogeStore((state) => state.pauseHorloge);
     const removeHorloge = useHorlogeStore((state) => state.removeHorloge);
 
-    const timerSet: string = convertirSecondesEnHrMinSec(convertirHMNenSecondes(horloge.timerSet), true);
-    const isFinish: boolean = horloge.timerRemaining === 0 ? true : false;
-    const isRunning: boolean = horloge.running;
-
-    const colorBg = isFinish === true ? 'bg-orange-600' : 'transparent';
-    const gradientClass = isFinish === true ? 'finish-box' : isRunning === true ? 'gradient-box' : 'finish-box';
+    const duree = formaterDuree(convertirHMNenSecondes(horloge.timerSet));
+    const etat = etatHorloge(horloge);
+    const pourcentage = convertirSecondesEnPourcentage(horloge);
+    const chiffres = convertirSecondesEnHrMinSec(horloge.timerRemaining);
 
     return (
-        <div className={`card group relative ${gradientClass}`}>
-            <button 
-                className="btn btn-circle w-[15px] h-[15px] absolute top-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                onClick={() => removeHorloge(horloge.id)}>
-                    X
-            </button>
-
-            <div className={`radial-progress ${colorBg} m-auto`} 
-                style={{ "--value": convertirSecondesEnPourcentage(horloge), "--size": "11rem", "--thickness": "8px" } as React.CSSProperties}
-                aria-valuenow={convertirSecondesEnPourcentage(horloge)} role="progressbar">{convertirSecondesEnHrMinSec(horloge.timerRemaining)}
-            </div>
-            <div className="absolute top-12">
-                <p className="m-auto text-base">{timerSet}</p>
-            </div>
-            <div className="absolute bottom-7">
-                <div className="card-body">
-                    <div className="card-actions justify-center">
-                    {isFinish === false ?
-                        <div className="tooltip tooltip-bottom tooltip-warning opacity-0 transition-opacity duration-300 group-hover:opacity-100" data-tip={ horloge.running === true ? "Pause" : "Lecture" }>
-                            {/* L'icône est pilotée par le store via swap-active : aucune source de vérité côté DOM */}
-                            <button
-                                type="button"
-                                className={`swap ${horloge.running ? '' : 'swap-active'}`}
-                                onClick={() => pauseHorloge(horloge.id)}
-                                aria-label={horloge.running ? 'Mettre en pause' : 'Reprendre'}>
-                                <span className="swap-on">▶</span>
-                                <span className="swap-off">⏸</span>
-                            </button>
-                        </div>
-                        : null
+        <article className="carte-minuteur" data-etat={etat} aria-label={`Minuteur de ${duree}`}>
+            {/* --reste pilote la taille du disque : il rétrécit à mesure que le temps passe */}
+            <div className="cadran"
+                role="progressbar"
+                aria-label="Temps restant"
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={Math.round(pourcentage)}
+                aria-valuetext={etat === 'termine' ? 'Terminé' : `Il reste ${formaterDuree(horloge.timerRemaining)}`}
+                style={{ "--reste": pourcentage } as React.CSSProperties}>
+                <svg className="cadran-graduations" viewBox="0 0 200 200" aria-hidden="true">{GRADUATIONS}</svg>
+                <div className="cadran-disque" />
+                <div className="cadran-moyeu">
+                    {etat === 'termine'
+                        ? <span className="cadran-termine">Terminé</span>
+                        : <span className={`cadran-chiffres ${chiffres.length > 5 ? 'cadran-chiffres--long' : ''}`}>{chiffres}</span>
                     }
-                    </div>
+                    {etat === 'en-pause' ? <span className="cadran-etat">En pause</span> : null}
                 </div>
             </div>
-        </div>
+
+            <p className="text-encre-douce">sur {duree}</p>
+
+            <div className="flex gap-2">
+                {etat !== 'termine' ?
+                    <button type="button" className="touche" onClick={() => pauseHorloge(horloge.id)}>
+                        {horloge.running ? 'Pause' : 'Reprendre'}
+                    </button>
+                    : null
+                }
+                <button type="button" className="bouton-discret" onClick={() => removeHorloge(horloge.id)}>
+                    Retirer
+                </button>
+            </div>
+        </article>
     );
 }

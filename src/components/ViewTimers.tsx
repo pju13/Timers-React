@@ -1,51 +1,44 @@
-import { convertirSecondesEnHrMinSec } from "../utils/temps";
 import { useHorlogeStore } from "../store/useHorlogeStore";
+import { etatHorloge } from "../utils/etat";
 
+// Résumé des minuteurs et actions globales ; le détail de chacun est sur son cadran
 export function ViewTimers() {
     const horloges = useHorlogeStore((state) => state.horloges);
     const removeAll = useHorlogeStore((state) => state.removeAll);
     const removeOnlyStop = useHorlogeStore((state) => state.removeOnlyStop);
     const pauseAllHorloges = useHorlogeStore((state) => state.pauseAllHorloges);
 
-    const horlogesDisplay = horloges?.map((horloge) => {
-        const isFinish: boolean = horloge.timerRemaining === 0 ? true : false;
+    if (horloges.length === 0) return null;
 
-        let colorBg = isFinish === true ? 'bg-orange-600' : 'bg-green-600';
-        colorBg = horloge.running === false ? '' : colorBg;
+    const etats = horloges.map(etatHorloge);
+    const enCours = etats.filter((etat) => etat === 'en-cours').length;
+    const enPause = etats.filter((etat) => etat === 'en-pause').length;
+    const termines = etats.filter((etat) => etat === 'termine').length;
 
-        const displayPauseIcon = horloge.running === false ? "⏸" : null;
-
-        return <tr className={`text-[12px] ${colorBg}`} key={horloge.id}>
-            <td>{displayPauseIcon}</td>
-            <td>{horloge.timerSet}</td>
-            <td><span className="ml-4 mr-1">{convertirSecondesEnHrMinSec(horloge.timerRemaining)}</span></td>
-            </tr>
-    });
+    const details = [
+        enCours > 0 ? `${enCours} en cours` : null,
+        enPause > 0 ? `${enPause} en pause` : null,
+        termines > 0 ? `${termines} ${termines > 1 ? 'terminés' : 'terminé'}` : null,
+    ].filter(Boolean).join(', ');
 
     return (
-        <div className="fixed top-1 left-3 bg-gray-700 text-white border-2 border-solid p-2 rounded-lg">
-            <h2 className="text-[14px]">Minuteurs en cours :</h2>
+        <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-graphite/15 pt-4">
+            <p aria-live="polite">
+                <span className="font-semibold">{horloges.length} {horloges.length > 1 ? 'minuteurs' : 'minuteur'}</span>
+                <span className="text-encre-douce"> : {details}</span>
+            </p>
 
-            <table className="table-fixed">
-                <thead>
-                    <tr>
-                        <th>Pause</th>
-                        <th>Time</th>
-                        <th>Remaining</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {horlogesDisplay}
-                </tbody>
-            </table>
-
-            {horlogesDisplay.length > 0 ? 
-                <>
-                <button className="btn btn-dash btn-error block mt-2" onClick={() => pauseAllHorloges()}>⏸ Pause Timers </button>
-                <button className="btn btn-dash btn-error block mt-2" onClick={() => removeOnlyStop()}>🗑 Timers only stop</button>
-                <button className="btn btn-dash btn-error block mt-2" onClick={() => removeAll()}>🗑 All Timers</button>
-                </>
-                : '<vide>'}
+            <div className="flex flex-wrap gap-1 -mx-2.5">
+                <button type="button" className="bouton-discret" disabled={enCours === 0} onClick={() => pauseAllHorloges()}>
+                    Tout mettre en pause
+                </button>
+                <button type="button" className="bouton-discret" disabled={termines === 0} onClick={() => removeOnlyStop()}>
+                    Retirer les terminés
+                </button>
+                <button type="button" className="bouton-discret" onClick={() => removeAll()}>
+                    Tout retirer
+                </button>
+            </div>
         </div>
-    )
+    );
 }

@@ -4,12 +4,14 @@ import { ViewTimers } from "./ViewTimers";
 
 export function TimerPage() {
     return (
-        <div className="relative">
-            <ViewTimers />
+        <main className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-8 sm:px-8 sm:py-12">
+            <header>
+                <h1 className="text-2xl font-extrabold tracking-tight [font-stretch:125%]">Minuteurs</h1>
+                <p className="text-encre-douce">Plusieurs comptes à rebours en parallèle, chacun sur son cadran.</p>
+            </header>
             <TimerForm />
-            <div className="flex flex-none flex-row justify-between w-[1000px] mt-10 m-auto gap-2">
-                <DisplayHorloge />
-            </div>
-        </div>
+            <ViewTimers />
+            <DisplayHorloge />
+        </main>
     );
 }

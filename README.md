@@ -12,14 +12,13 @@ J'ai récemment développé une application monopage (SPA) complète en React d�
 
 - **React** : Le cœur de l'application, permettant une interface utilisateur dynamique et réactive.
 - **Zustand** : Pour la gestion de l'état global, facilitant le partage de données à travers les composants sans prop drilling.
-- **DaisyUI** : Une bibliothèque de composants UI basée sur Tailwind CSS, permettant une conception rapide et cohérente.
-- **Tailwind CSS** : Pour le styling, offrant une grande flexibilité et une personnalisation facile des composants.
+- **Tailwind CSS (v4)** : Pour le styling, avec une palette et une typographie propres au projet déclarées dans `@theme`.
 - **Formik** : Pour la gestion des formulaires, simplifiant la validation et la soumission des données.
 - **Yup** : Pour la validation des formulaires, assurant que les données saisies par les utilisateurs sont correctes et cohérentes.
 
 ## Fonctionnalités Clés
 
-- **Interface Utilisateur Intuitive** : Conçue avec DaisyUI et Tailwind CSS pour une expérience utilisateur agréable et cohérente.
+- **Interface inspirée d'un minuteur de cuisine** : Chaque minuteur a son cadran gradué, dont le disque jaune rétrécit à mesure que le temps passe. Gris en pause, rouge une fois terminé.
 - **Gestion des Timers** : Affichage des Timers avec la possibilité de les mettre en pause et de les supprimer. Possibilité de manager les Timers : Mettre tous les Timers en Pause, Suppression des Timers.
 - **Formulaires Robustes** : Utilisation de Formik et Yup pour le formulaire de saisie des Hr:Min:Sec robustes et validés.
 - **Gestion du temps** : Chaque Timer utilise son propre setInterval() pour gérer l'affichage.

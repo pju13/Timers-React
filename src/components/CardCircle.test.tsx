@@ -13,35 +13,41 @@ const horloge = (surcharges: Partial<Horloge> = {}): Horloge => ({
     ...surcharges,
 });
 
+const carte = () => screen.getByRole('article', { name: 'Minuteur de 1 min' });
+
 describe('CardCircle', () => {
     it('affiche le temps restant et la durée initiale', () => {
         render(<CardCircle horloge={horloge()} />);
 
         expect(screen.getByRole('progressbar')).toHaveTextContent('30');
-        expect(screen.getByText('01m 00s')).toBeInTheDocument();
+        expect(screen.getByText('sur 1 min')).toBeInTheDocument();
     });
 
     it('reflète la progression dans aria-valuenow', () => {
         render(<CardCircle horloge={horloge()} />);
 
         expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '50');
+        expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuetext', 'Il reste 30 s');
     });
 
-    it('masque le bouton pause quand le minuteur est terminé', () => {
+    it('affiche « Terminé » et masque le bouton pause quand le minuteur est terminé', () => {
         const { rerender } = render(<CardCircle horloge={horloge()} />);
-        expect(screen.getByRole('button', { name: 'Mettre en pause' })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: 'Pause' })).toBeInTheDocument();
 
         rerender(<CardCircle horloge={horloge({ timerRemaining: 0, stop: true })} />);
-        expect(screen.queryByRole('button', { name: 'Mettre en pause' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('button', { name: 'Pause' })).not.toBeInTheDocument();
+        expect(screen.getByRole('progressbar')).toHaveTextContent('Terminé');
+        expect(carte()).toHaveAttribute('data-etat', 'termine');
     });
 
     it('suit l\'état du store même quand la pause vient d\'ailleurs', () => {
-        // Simule « Pause Timers » : running change sans clic sur la carte
+        // Simule « Tout mettre en pause » : running change sans clic sur la carte
         const { rerender } = render(<CardCircle horloge={horloge({ running: true })} />);
-        const bouton = screen.getByRole('button', { name: 'Mettre en pause' });
-        expect(bouton).not.toHaveClass('swap-active');
+        expect(carte()).toHaveAttribute('data-etat', 'en-cours');
 
         rerender(<CardCircle horloge={horloge({ running: false })} />);
-        expect(screen.getByRole('button', { name: 'Reprendre' })).toHaveClass('swap-active');
+        expect(carte()).toHaveAttribute('data-etat', 'en-pause');
+        expect(screen.getByRole('button', { name: 'Reprendre' })).toBeInTheDocument();
+        expect(screen.getByText('En pause')).toBeInTheDocument();
     });
 });

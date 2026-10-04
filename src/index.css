@@ -1,13 +1,96 @@
 @import "tailwindcss";
-@plugin "daisyui";
+
+/* Palette inspirée d'un minuteur de cuisine : boîtier gris, cadran graphite, disque jaune */
+@theme {
+    --font-sans: "Archivo", ui-sans-serif, system-ui, sans-serif;
+
+    --color-coque: #D8DAD6;
+    --color-touche: #E8E9E5;
+    --color-graphite: #232528;
+    --color-craie: #EEEFEA;
+    --color-signal: #F2B705;
+    --color-alarme: #E0452B;
+    --color-alarme-texte: #A42B17;
+    --color-ardoise: #8B8E91;
+    --color-encre-douce: #55595C;
+}
+
+/* Thème clair imposé : l'interface imite un objet physique, elle ne change pas avec le thème du système */
+:root {
+    color-scheme: light;
+}
 
 body {
     min-height: 100vh;
+    background-color: var(--color-coque);
+    color: var(--color-graphite);
+    font-family: var(--font-sans);
+}
 
-    background: /* just to illustrate card transparency */
-		url(/clouds-2725520_1920.jpg)
-			50%/ cover #212121;
-	/* darken image (multiplying its RGB channels with 
-	 * those of background-color) for better text contrast */
-	background-blend-mode: multiply;
+:focus-visible {
+    outline: 2px solid var(--color-graphite);
+    outline-offset: 2px;
+}
+
+::selection {
+    background: var(--color-signal);
+    color: var(--color-graphite);
+}
+
+@layer components {
+    /* Touche en relief : la bordure basse épaisse s'écrase quand on appuie */
+    .touche {
+        padding: 0.5rem 0.875rem;
+        border: 1px solid rgb(35 37 40 / 0.18);
+        border-bottom-width: 3px;
+        border-radius: 0.375rem;
+        background: var(--color-touche);
+        color: var(--color-graphite);
+        font-size: 0.9375rem;
+        font-weight: 600;
+        line-height: 1.25;
+        cursor: pointer;
+        transition: background-color 0.15s, transform 0.08s;
+    }
+
+    .touche:hover {
+        background: #F4F5F1;
+    }
+
+    .touche:active {
+        transform: translateY(2px);
+        border-bottom-width: 1px;
+        margin-bottom: 2px;
+    }
+
+    .touche-signal {
+        background: var(--color-signal);
+        border-color: #A57C00;
+    }
+
+    .touche-signal:hover {
+        background: #F7C42E;
+    }
+
+    .bouton-discret {
+        padding: 0.5rem 0.625rem;
+        border-radius: 0.375rem;
+        color: var(--color-encre-douce);
+        font-size: 0.9375rem;
+        text-decoration: underline;
+        text-decoration-color: transparent;
+        text-underline-offset: 3px;
+        cursor: pointer;
+    }
+
+    .bouton-discret:hover {
+        color: var(--color-graphite);
+        text-decoration-color: currentColor;
+    }
+
+    .bouton-discret:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        text-decoration-color: transparent;
+    }
 }

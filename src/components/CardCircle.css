@@ -1,80 +1,127 @@
-@property --rotation {
-  syntax: '<angle>';
-  inherits: false;
-  initial-value: 0turn;
+/* Propriété typée : le navigateur sait l'interpoler, le disque glisse au lieu de sauter chaque seconde */
+@property --reste {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 100;
 }
 
-.finish-box {
-  position: relative;
-  aspect-ratio: 1;
-  display: grid;
-  place-items: center;
-  padding: 1rem;         
-  border-radius: 50%;
-  overflow: hidden;
+.carte-minuteur {
+  --couleur-disque: var(--color-signal);
 
-  font-size: 2rem;
-  font-family: system-ui; 
-  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
 }
 
-.gradient-box {
+.carte-minuteur[data-etat="en-pause"] {
+  --couleur-disque: var(--color-ardoise);
+}
+
+/* Sans ça, la dernière seconde de transition du disque reste visible sur le fond rouge */
+.carte-minuteur[data-etat="termine"] {
+  --couleur-disque: transparent;
+}
+
+.cadran {
   position: relative;
+  width: min(100%, 13rem);
   aspect-ratio: 1;
-  display: grid;
-  place-items: center;
-  padding: 1rem;         
   border-radius: 50%;
-  overflow: hidden;
+  background: var(--color-graphite);
+  /* La lunette claire évoque le boîtier en plastique autour du cadran */
+  box-shadow:
+    0 0 0 6px var(--color-touche),
+    0 14px 28px -16px rgb(35 37 40 / 0.6);
+  container-type: inline-size;
+  transition: --reste 1s linear;
+}
 
-  font-size: 2rem;
-  font-family: system-ui;
-  color: white;
+.cadran-graduations {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
 
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    border-radius: 30px;
+.cadran-graduations line {
+  stroke: var(--color-craie);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  opacity: 0.5;
+}
 
-    background-image: conic-gradient(from var(--rotation, 0turn),
-      hsl(360, 100%, 50%),
-      hsl(315, 100%, 50%),
-      hsl(270, 100%, 50%),
-      hsl(225, 100%, 50%),
-      hsl(180, 100%, 50%),
-      hsl(135, 100%, 50%),
-      hsl(90, 100%, 50%),
-      hsl(45, 100%, 50%),
-      hsl(0, 100%, 50%)
+.cadran-graduations line.majeure {
+  stroke-width: 3;
+  opacity: 1;
+}
+
+/* Le secteur coloré part de midi : son bord avance dans le sens des aiguilles */
+.cadran-disque {
+  position: absolute;
+  inset: 11%;
+  border-radius: 50%;
+  background: conic-gradient(
+    transparent 0 calc((100 - var(--reste)) * 1%),
+    var(--couleur-disque) 0
   );
-
-  -webkit-mask-image: radial-gradient(hsl(0 0 0 / .1) 50%, black); /* Masque radial */
-  mask-image: radial-gradient(hsl(0 0 0 / .1) 50%, black); /* Masque radial */
-  -webkit-mask-size: 100% 100%; /* Taille du masque */
-  mask-size: 100% 100%; /* Taille du masque */
-
-    /*background-image:
-      conic-gradient(from var(--rotation, 0turn),
-      #F1F8E9, 
-      #9CCC65,
-      #7CB342,
-      #9CCC65,
-      #F1F8E9
-    ); */
-   
-    /*-webkit-mask-image: radial-gradient(hsl(0 0 0 / .1) 55%, black); /* Masque radial */
-    /*mask-image: radial-gradient(hsl(0 0 0 / .1) 55%, black); /* Masque radial */
-    /*-webkit-mask-size: 100% 100%; /* Taille du masque */
-    /*mask-size: 100% 100%; /* Taille du masque */
-
-    animation: 6s rotateGradient linear infinite;
-    animation-direction: reverse;
-  }
 }
 
-@keyframes rotateGradient {
-  from { --rotation: 0turn}
-  to { --rotation: 1turn}
+.cadran-moyeu {
+  position: absolute;
+  inset: 24%;
+  border-radius: 50%;
+  background: var(--color-graphite);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  color: var(--color-craie);
+}
+
+.cadran-chiffres {
+  font-size: 15cqi;
+  font-weight: 700;
+  font-stretch: 75%;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.cadran-chiffres--long {
+  font-size: 11cqi;
+}
+
+.cadran-etat {
+  font-size: 0.8125rem;
+  color: var(--color-ardoise);
+}
+
+.cadran-termine {
+  font-size: 9cqi;
+  font-weight: 700;
+}
+
+.carte-minuteur[data-etat="termine"] .cadran {
+  background: var(--color-alarme);
+  animation: sonnerie 0.5s ease-in-out 3;
+}
+
+/* Le seul mouvement automatique de la page : le minuteur « sonne » en arrivant à zéro */
+@keyframes sonnerie {
+  0%, 100% { rotate: 0deg; }
+  20% { rotate: -6deg; }
+  40% { rotate: 5deg; }
+  60% { rotate: -4deg; }
+  80% { rotate: 2deg; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cadran {
+    transition: none;
+  }
+
+  .carte-minuteur[data-etat="termine"] .cadran {
+    animation: none;
+  }
 }

@@ -3,6 +3,7 @@ import {
     convertirSecondesEnHrMinSec,
     convertirHMNenSecondes,
     convertirSecondesEnPourcentage,
+    formaterDuree,
 } from './temps';
 import { Horloge } from '../types/types';
 
@@ -67,5 +68,19 @@ describe('convertirSecondesEnPourcentage', () => {
     it('rend la proportion du temps restant', () => {
         expect(convertirSecondesEnPourcentage(horloge('0:1:0', 30))).toBe(50);
         expect(convertirSecondesEnPourcentage(horloge('1:0:0', 900))).toBe(25);
+    });
+});
+
+describe('formaterDuree', () => {
+    it('n\'affiche que les unités non nulles', () => {
+        expect(formaterDuree(45)).toBe('45 s');
+        expect(formaterDuree(300)).toBe('5 min');
+        expect(formaterDuree(3600)).toBe('1 h');
+        expect(formaterDuree(5400)).toBe('1 h 30 min');
+        expect(formaterDuree(3661)).toBe('1 h 1 min 1 s');
+    });
+
+    it('affiche "0 s" pour une durée nulle', () => {
+        expect(formaterDuree(0)).toBe('0 s');
     });
 });

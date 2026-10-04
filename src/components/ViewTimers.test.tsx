@@ -14,23 +14,34 @@ const horloge = (surcharges: Partial<Horloge> = {}): Horloge => ({
     ...surcharges,
 });
 
-// La ligne <tr> qui contient la durée initiale de l'horloge
-const ligneDe = (timerSet: string) => screen.getByText(timerSet).closest('tr');
-
 describe('ViewTimers', () => {
     beforeEach(() => useHorlogeStore.setState({ horloges: [] }));
 
-    it('applique la taille de texte et la couleur « en cours » à la ligne', () => {
-        useHorlogeStore.setState({ horloges: [horloge()] });
-        render(<ViewTimers />);
+    it('ne s\'affiche pas sans minuteur', () => {
+        const { container } = render(<ViewTimers />);
 
-        expect(ligneDe('0:1:0')).toHaveClass('text-[12px]', 'bg-green-600');
+        expect(container).toBeEmptyDOMElement();
     });
 
-    it('colore en orange un minuteur terminé', () => {
-        useHorlogeStore.setState({ horloges: [horloge({ timerRemaining: 0, stop: true })] });
+    it('résume le nombre de minuteurs par état', () => {
+        useHorlogeStore.setState({ horloges: [
+            horloge({ id: 'a' }),
+            horloge({ id: 'b', running: false }),
+            horloge({ id: 'c', timerRemaining: 0, stop: true }),
+            horloge({ id: 'd', timerRemaining: 0, stop: true }),
+        ] });
         render(<ViewTimers />);
 
-        expect(ligneDe('0:1:0')).toHaveClass('text-[12px]', 'bg-orange-600');
+        expect(screen.getByText('4 minuteurs')).toBeInTheDocument();
+        expect(screen.getByText(': 1 en cours, 1 en pause, 2 terminés')).toBeInTheDocument();
+    });
+
+    it('désactive les actions qui n\'ont rien à faire', () => {
+        useHorlogeStore.setState({ horloges: [horloge({ running: false })] });
+        render(<ViewTimers />);
+
+        expect(screen.getByRole('button', { name: 'Tout mettre en pause' })).toBeDisabled();
+        expect(screen.getByRole('button', { name: 'Retirer les terminés' })).toBeDisabled();
+        expect(screen.getByRole('button', { name: 'Tout retirer' })).toBeEnabled();
     });
 });
