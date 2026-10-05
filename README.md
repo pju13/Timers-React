@@ -15,6 +15,7 @@ J'ai récemment développé une application monopage (SPA) complète en React d�
 - **Tailwind CSS (v4)** : Pour le styling, avec une palette et une typographie propres au projet déclarées dans `@theme`.
 - **Formik** : Pour la gestion des formulaires, simplifiant la validation et la soumission des données.
 - **Yup** : Pour la validation des formulaires, assurant que les données saisies par les utilisateurs sont correctes et cohérentes.
+- **Claude Terminal / Claude Design** : Itération UI assistée par IA (variantes générées puis retravaillées), revue de code systématique avant merge.
 
 ## Fonctionnalités Clés
 
